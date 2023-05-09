@@ -37,8 +37,8 @@ const paginate = async (currentPage, PAGE_SIZE, pokemons) => {
 const setup = async () => {
     // test out poke api using axios here
 
-
-    $('#pokeCards').empty()
+    //get list of all pokemons
+    $('#pokeCards').empty() //empty() delete all content
     let response = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=810');
     pokemons = response.data.results;
 
