@@ -40,7 +40,7 @@ const updatePaginationDiv = (currentPage, numPages) => {
             active = "active";
         }
         $('#pagination').append(`
-        <button type="button" class="btn btn-primary pageBtn id="page${i}" pageNum="${i}">${i}</button>
+        <button type="button" class="btn btn-primary pageBtn ${active}" id="page${i}" pageNum="${i}">${i}</button>
         `);
     }
 
