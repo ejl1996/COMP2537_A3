@@ -2,6 +2,7 @@ const PAGE_SIZE = 10
 let currentPage = 1;
 let pokemons = []
 const numPageBtn = 5;
+//const pageNum = -2;
 
 
 const updatePaginationDiv = (currentPage, numPages) => {
@@ -119,6 +120,14 @@ const setup = async () => {
         //update pagination buttons
         updatePaginationDiv(currentPage, numPages)
     })
+
+    //thoguht it was a string. Parsed it as integer 
+    $('body').on('click', '.pageBtn', async function (e) {
+        const pageNum = parseInt($(this).attr('pageNum'))
+        console.log("========pageBtn clicked");
+        console.log("pageNum: ", pageNum);
+        showPage(pageNum);
+    });
 
     //var numPerPage = 10; 
     //for (let i =1; i <= endI; i++) {y}
