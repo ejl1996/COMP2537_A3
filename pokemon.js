@@ -2,7 +2,7 @@ const PAGE_SIZE = 10
 let currentPage = 1;
 let pokemons = []
 const numPageBtn = 5;
-//const pageNum = -2;
+const pageNum = -2;
 
 
 const updatePaginationDiv = (currentPage, numPages) => {
@@ -28,16 +28,26 @@ const updatePaginationDiv = (currentPage, numPages) => {
     console.log("currentPage: ", currentPage);
     console.log("numPageBtn: ", numPageBtn);
 
+    //for (let i = startI; i <= endI; i++) {
+    //$('#pagination').append(`
+    //<button type="button" class="btn btn-primary pageBtn" id="page${i}" pageNum="${i}">${i}</button>
+    //`);
+    //}
+
     for (let i = startI; i <= endI; i++) {
+        var active = "";
+        if (i == currentPage) {
+            active = "active";
+        }
         $('#pagination').append(`
-        <button type="button" class="btn btn-primary pageBtn" id="page${i}" pageNum="${i}">${i}</button>
+        <button type="button" class="btn btn-primary pageBtn id="page${i}" pageNum="${i}">${i}</button>
         `);
     }
 
     for (let i = startPage; i <= endPage; i++) {
         $('#pagination').append(`
-    <button class="btn btn-primary page ml-1 numberedButtons" value="${i}">${i}</button>
-    `)
+            < button class= "btn btn-primary page ml-1 numberedButtons" value = "${i}" > ${i}</button >
+            `)
     }
 
 }
@@ -50,14 +60,14 @@ const paginate = async (currentPage, PAGE_SIZE, pokemons) => {
         const res = await axios.get(pokemon.url)
         //name to uppercase
         $('#pokeCards').append(`
-      <div class="pokeCard card" pokeName=${res.data.name}>
+        < div class= "pokeCard card" pokeName = ${res.data.name} >
         <h3>${res.data.name.toUpperCase()}</h3> 
         <img src="${res.data.sprites.front_default}" alt="${res.data.name}"/>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pokeModal">
           More
         </button>
-        </div>  
-        `)
+        </div >
+    `)
     })
 }
 
