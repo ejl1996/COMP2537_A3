@@ -1,8 +1,7 @@
 const PAGE_SIZE = 10
 let currentPage = 1;
 let pokemons = []
-const numPageBtn = 5;
-const pageNum = -2;
+//const numPageBtn = 5;
 
 
 const updatePaginationDiv = (currentPage, numPages) => {
@@ -11,45 +10,11 @@ const updatePaginationDiv = (currentPage, numPages) => {
     const startPage = 1;
     const endPage = numPages;
 
-
-    pageNum - 2
-    pageNum - 1
-    pageNum
-    pageNum + 1
-    pageNum + 2
-
-    //add pagination buttons
-    $('#pagination').empty();
-    var startI = Math.max(1, currentPage - Math.floor(numPageBtn / 2));
-    var endI = Math.min(numPages, currentPage + Math.floor(numPageBtn / 2));
-    console.log("startI: ", startI);
-    console.log("endI: ", endI);
-    console.log("numPages: ", numPages);
-    console.log("currentPage: ", currentPage);
-    console.log("numPageBtn: ", numPageBtn);
-
-    //for (let i = startI; i <= endI; i++) {
-    //$('#pagination').append(`
-    //<button type="button" class="btn btn-primary pageBtn" id="page${i}" pageNum="${i}">${i}</button>
-    //`);
-    //}
-
-    for (let i = startI; i <= endI; i++) {
-        var active = "";
-        if (i == currentPage) {
-            active = "active";
-        }
-        $('#pagination').append(`
-        <button type="button" class="btn btn-primary pageBtn ${active}" id="page${i}" pageNum="${i}">${i}</button>
-        `);
-    }
-
     for (let i = startPage; i <= endPage; i++) {
         $('#pagination').append(`
-            < button class= "btn btn-primary page ml-1 numberedButtons" value = "${i}" > ${i}</button >
+            <button class= "btn btn-primary page ml-1 numberedButtons" value = "${i}" > ${i}</button >
             `)
     }
-
 }
 
 const paginate = async (currentPage, PAGE_SIZE, pokemons) => {
@@ -58,24 +23,23 @@ const paginate = async (currentPage, PAGE_SIZE, pokemons) => {
     $('#pokeCards').empty()
     selected_pokemons.forEach(async (pokemon) => {
         const res = await axios.get(pokemon.url)
-        //name to uppercase
         $('#pokeCards').append(`
-        < div class= "pokeCard card" pokeName = ${res.data.name} >
+      <div class="pokeCard card" pokeName=${res.data.name}   >
         <h3>${res.data.name.toUpperCase()}</h3> 
         <img src="${res.data.sprites.front_default}" alt="${res.data.name}"/>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pokeModal">
           More
         </button>
-        </div >
-    `)
+        </div>  
+        `)
     })
 }
 
 const setup = async () => {
     // test out poke api using axios here
 
-    //get list of all pokemons
-    $('#pokeCards').empty() //empty() delete all content
+
+    $('#pokeCards').empty()
     let response = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=810');
     pokemons = response.data.results;
 
@@ -83,6 +47,7 @@ const setup = async () => {
     paginate(currentPage, PAGE_SIZE, pokemons)
     const numPages = Math.ceil(pokemons.length / PAGE_SIZE)
     updatePaginationDiv(currentPage, numPages)
+
 
 
     // pop up modal when clicking on a pokemon card
@@ -131,31 +96,65 @@ const setup = async () => {
         updatePaginationDiv(currentPage, numPages)
     })
 
-    //thoguht it was a string. Parsed it as integer 
-    $('body').on('click', '.pageBtn', async function (e) {
-        const pageNum = parseInt($(this).attr('pageNum'))
-        console.log("========pageBtn clicked");
-        console.log("pageNum: ", pageNum);
-        showPage(pageNum);
-    });
-
-    //var numPerPage = 10; 
-    //for (let i =1; i <= endI; i++) {y}
-
-    // $('#pagination').empty();
-    // var startI = Math.max(1, currentPage - Math.floor(numPageBtn / 2));
-    // var endI = Math.min(numPages, currentPage + Math.floor(numPageBtn / 2));
-    // console.log("startI: ", startI);
-    // console.log("endI: ", endI);
-    // console.log("numPages: ", numPages);
-    // console.log("currentPage: ", currentPage);
-    // console.log("numPageBtn: ", numPageBtn);
-
-    // for (let i = startI; i <= endI; i++) {
-    //     $('#pagination').append(`
-    //     <button type="button" class="btn btn-primary pageBtn" id="page${i}" pageNum)
-    //     `);
-    // }
 }
+
+//pageNum - 2
+//pageNum - 1
+//pageNum
+//pageNum + 1
+//pageNum + 2
+
+//add pagination buttons
+//$('#pagination').empty();
+//var startI = Math.max(1, currentPage - Math.floor(numPageBtn / 2));
+//var endI = Math.min(numPages, currentPage + Math.floor(numPageBtn / 2));
+//console.log("startI: ", startI);
+//console.log("endI: ", endI);
+//console.log("numPages: ", numPages);
+//console.log("currentPage: ", currentPage);
+//console.log("numPageBtn: ", numPageBtn);
+
+//for (let i = startI; i <= endI; i++) {
+//$('#pagination').append(`
+//<button type="button" class="btn btn-primary pageBtn" id="page${i}" pageNum="${i}">${i}</button>
+//`);
+//}
+
+// for (let i = startI; i <= endI; i++) {
+//var active = "";
+//if (i == currentPage) {
+//active = "active";
+//}
+//$('#pagination').append(`
+//<button type="button" class="btn btn-primary pageBtn ${active}" id="page${i}" pageNum="${i}">${i}</button>
+//`);
+//}
+
+//thoguht it was a string. Parsed it as integer 
+//$('body').on('click', '.pageBtn', async function (e) {
+//const pageNum = parseInt($(this).attr('pageNum'))
+//console.log("========pageBtn clicked");
+//console.log("pageNum: ", pageNum);
+//showPage(pageNum);
+//});
+
+//var numPerPage = 10; 
+//for (let i =1; i <= endI; i++) {y}
+
+// $('#pagination').empty();
+// var startI = Math.max(1, currentPage - Math.floor(numPageBtn / 2));
+// var endI = Math.min(numPages, currentPage + Math.floor(numPageBtn / 2));
+// console.log("startI: ", startI);
+// console.log("endI: ", endI);
+// console.log("numPages: ", numPages);
+// console.log("currentPage: ", currentPage);
+// console.log("numPageBtn: ", numPageBtn);
+
+// for (let i = startI; i <= endI; i++) {
+//     $('#pagination').append(`
+//     <button type="button" class="btn btn-primary pageBtn" id="page${i}" pageNum)
+//     `);
+// }
+
 
 $(document).ready(setup)
