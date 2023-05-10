@@ -6,16 +6,36 @@ let pokemons = []
 
 const updatePaginationDiv = (currentPage, numPages) => {
     $('#pagination').empty()
+    $('#pagination').append(`
+    <button type="button" class="btn btn-primary page ml-1 prevButtons" id="prev">Prev</button>
+    <button type="button" class="btn btn-primary page ml-1 nextButtons" id="next">Next</button>
+    `)
+
+
 
     const startPage = 1;
     const endPage = numPages;
+    const x = currentPage;
+    const prev = x - 1;
+    const next = x + 1;
 
-    for (let i = startPage; i <= endPage; i++) {
+
+    if (x == 1) {
+        $("#prev").hide();
+    }
+
+    if (x == 81) {
+        $("#next").hide();
+    }
+
+
+    for (let i = Math.max(x - 2, 1); i <= Math.min(x + 2, 81); i++) {
         $('#pagination').append(`
-            <button class= "btn btn-primary page ml-1 numberedButtons" value = "${i}" > ${i}</button >
+            <button class= "btn btn-primary page ml-1 numberedButtons" value = "${i}" > ${i}</button>
             `)
     }
 }
+
 
 const paginate = async (currentPage, PAGE_SIZE, pokemons) => {
     selected_pokemons = pokemons.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
@@ -94,6 +114,22 @@ const setup = async () => {
 
         //update pagination buttons
         updatePaginationDiv(currentPage, numPages)
+    })
+
+    $('body').on('click', ".prevButtons", async function (e) {
+        currentPage = Number(e.target.value)
+        paginate(currentPage, PAGE_SIZE, pokemons)
+
+        //update pagination buttons
+        updatePaginationDiv(currentPage - 1, numPages - 1)
+    })
+
+    $('body').on('click', ".nextButtons", async function (e) {
+        currentPage = Number(e.target.value)
+        paginate(currentPage, PAGE_SIZE, pokemons)
+
+        //update pagination buttons
+        updatePaginationDiv(currentPage + 1, numPages + 1)
     })
 
 }
