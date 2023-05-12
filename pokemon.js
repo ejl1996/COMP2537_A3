@@ -3,8 +3,35 @@ let currentPage = 1;
 let pokemons = []
 //const numPageBtn = 5;
 
+$(document).ready(function () {
+    const apiUrl = 'https://pokeapi.co/api/v2/type';
+
+    // Fetch Pokémon types from the APIs
+    $.ajax({
+        url: apiUrl,
+        method: 'GET',
+        success: function (response) {
+            //fetch types
+            const types = response.results;
+
+            // Generate checkboxes for each Pokémon type
+            types.forEach(function (type) {
+                const checkbox = $('<input type="checkbox" class="typeCheckbox" value="' + type.name + '">');
+                const label = $('<label class="typeLabel">' + type.name + '</label>');
+
+                $('#typegroup').append(checkbox);
+                $('#typegroup').append(label);
+            });
+        },
+        error: function () {
+            console.log('Error occurred while fetching Pokémon types.');
+        }
+    });
+});
+
 
 const updatePaginationDiv = (currentPage, numPages) => {
+
     $('#pagination').empty()
     $('#pagination').append(`
     <button type="button" class="btn btn-primary page ml-1 prevButtons" value = "${currentPage - 1}" id="prev">Prev</button>
