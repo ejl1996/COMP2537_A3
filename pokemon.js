@@ -4,7 +4,7 @@ let pokemons = []
 //const numPageBtn = 5;
 
 $(document).ready(function () {
-    const apiUrl = 'https://pokeapi.co/api/v2/type/';
+    const apiUrl = 'https://pokeapi.co/api/v2/type';
 
     // Fetch Pokémon types from the APIs
     $.ajax({
@@ -166,8 +166,6 @@ const setup = async () => {
     })
 
 }
-
-
 
 
 $(document).ready(setup)
