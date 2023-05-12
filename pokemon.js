@@ -7,8 +7,7 @@ let pokemons = []
 const updatePaginationDiv = (currentPage, numPages) => {
     $('#pagination').empty()
     $('#pagination').append(`
-    <button type="button" class="btn btn-primary page ml-1 prevButtons" id="prev">Prev</button>
-    <button type="button" class="btn btn-primary page ml-1 nextButtons" id="next">Next</button>
+    <button type="button" class="btn btn-primary page ml-1 prevButtons" value = "${currentPage - 1}" id="prev">Prev</button>
     `)
 
 
@@ -28,12 +27,19 @@ const updatePaginationDiv = (currentPage, numPages) => {
         $("#next").hide();
     }
 
-
     for (let i = Math.max(x - 2, 1); i <= Math.min(x + 2, 81); i++) {
+        let buttonClass = "btn btn-primary page ml-1 numberedButtons";
+        if (i == x) {
+            buttonClass += " active";
+        }
         $('#pagination').append(`
-            <button class= "btn btn-primary page ml-1 numberedButtons" value = "${i}" > ${i}</button>
-            `)
+            <button class= "${buttonClass}" value = "${i}" > ${i}</button>
+            `);
     }
+    $('#pagination').append(`
+    <button type="button" class="btn btn-primary page ml-1 prevButtons" value = "${currentPage + 1}" id="next">Next</button>
+    `)
+
 }
 
 
@@ -121,7 +127,7 @@ const setup = async () => {
         paginate(currentPage, PAGE_SIZE, pokemons)
 
         //update pagination buttons
-        updatePaginationDiv(currentPage - 1, numPages - 1)
+        updatePaginationDiv(currentPage, numPages)
     })
 
     $('body').on('click', ".nextButtons", async function (e) {
@@ -129,68 +135,12 @@ const setup = async () => {
         paginate(currentPage, PAGE_SIZE, pokemons)
 
         //update pagination buttons
-        updatePaginationDiv(currentPage + 1, numPages + 1)
+        updatePaginationDiv(currentPage, numPages)
     })
 
 }
 
-//pageNum - 2
-//pageNum - 1
-//pageNum
-//pageNum + 1
-//pageNum + 2
 
-//add pagination buttons
-//$('#pagination').empty();
-//var startI = Math.max(1, currentPage - Math.floor(numPageBtn / 2));
-//var endI = Math.min(numPages, currentPage + Math.floor(numPageBtn / 2));
-//console.log("startI: ", startI);
-//console.log("endI: ", endI);
-//console.log("numPages: ", numPages);
-//console.log("currentPage: ", currentPage);
-//console.log("numPageBtn: ", numPageBtn);
-
-//for (let i = startI; i <= endI; i++) {
-//$('#pagination').append(`
-//<button type="button" class="btn btn-primary pageBtn" id="page${i}" pageNum="${i}">${i}</button>
-//`);
-//}
-
-// for (let i = startI; i <= endI; i++) {
-//var active = "";
-//if (i == currentPage) {
-//active = "active";
-//}
-//$('#pagination').append(`
-//<button type="button" class="btn btn-primary pageBtn ${active}" id="page${i}" pageNum="${i}">${i}</button>
-//`);
-//}
-
-//thoguht it was a string. Parsed it as integer 
-//$('body').on('click', '.pageBtn', async function (e) {
-//const pageNum = parseInt($(this).attr('pageNum'))
-//console.log("========pageBtn clicked");
-//console.log("pageNum: ", pageNum);
-//showPage(pageNum);
-//});
-
-//var numPerPage = 10; 
-//for (let i =1; i <= endI; i++) {y}
-
-// $('#pagination').empty();
-// var startI = Math.max(1, currentPage - Math.floor(numPageBtn / 2));
-// var endI = Math.min(numPages, currentPage + Math.floor(numPageBtn / 2));
-// console.log("startI: ", startI);
-// console.log("endI: ", endI);
-// console.log("numPages: ", numPages);
-// console.log("currentPage: ", currentPage);
-// console.log("numPageBtn: ", numPageBtn);
-
-// for (let i = startI; i <= endI; i++) {
-//     $('#pagination').append(`
-//     <button type="button" class="btn btn-primary pageBtn" id="page${i}" pageNum)
-//     `);
-// }
 
 
 $(document).ready(setup)
