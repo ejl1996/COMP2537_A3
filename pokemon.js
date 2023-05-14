@@ -59,6 +59,7 @@ const fetchPokemons = async () => {
     } catch (error) {
         console.log('Error occurred while fetching Pokémon.', error);
     }
+    console.log(fetchPokemons)
 };
 
 const fetchPokemonDetails = async () => {
