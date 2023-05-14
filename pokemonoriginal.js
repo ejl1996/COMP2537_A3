@@ -1,8 +1,7 @@
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 10
 let currentPage = 1;
-let pokemons = [];
-let selectedTypes = [];
-
+let pokemons = []
+//const numPageBtn = 5;
 $(document).ready(function () {
     const apiUrl = 'https://pokeapi.co/api/v2/type';
 
@@ -11,7 +10,7 @@ $(document).ready(function () {
         url: apiUrl,
         method: 'GET',
         success: function (response) {
-            // Fetch types
+            //fetch types
             const types = response.results;
 
             // Generate checkboxes for each Pokémon type
@@ -22,23 +21,6 @@ $(document).ready(function () {
                 $('#typegroup').append(checkbox);
                 $('#typegroup').append(label);
             });
-
-            // Add event listener to the checkboxes
-            $('.typeCheckbox').on('change', function () {
-                // Update the selected types array
-                selectedTypes = $('.typeCheckbox:checked').map(function () {
-                    return $(this).val();
-                }).get();
-
-                // Reset the current page to 1
-                currentPage = 1;
-
-                // Filter and paginate the Pokémon based on the selected types
-                filterAndPaginate();
-            });
-
-            // Fetch all Pokémon initially
-            fetchPokemons();
         },
         error: function () {
             console.log('Error occurred while fetching Pokémon types.');
@@ -46,40 +28,6 @@ $(document).ready(function () {
     });
 });
 
-const fetchPokemons = async () => {
-    try {
-        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=810');
-        pokemons = response.data.results;
-
-        filterAndPaginate();
-    } catch (error) {
-        console.log('Error occurred while fetching Pokémon.', error);
-    }
-};
-
-const filterAndPaginate = () => {
-    // Filter Pokémon based on selected types
-    const filteredPokemons = pokemons.filter(pokemon => {
-        for (let i = 0; i < pokemon.types.length; i++) {
-            if (selectedTypes.includes(pokemon.types[i].type.name)) {
-                return true;
-            }
-        }
-        return false;
-    });
-
-    // Paginate the filtered Pokémon
-    paginate(currentPage, PAGE_SIZE, filteredPokemons);
-
-    // Update the visibility of Pokémon cards
-    $('.pokeCard').each(function () {
-        const pokemonName = $(this).attr('pokeName');
-        const isVisible = filteredPokemons.some(pokemon => pokemon.name === pokemonName);
-        $(this).toggle(isVisible);
-    });
-};
-
-// Rest of the code remains the same...
 
 const updatePaginationDiv = (currentPage, numPages) => {
 
