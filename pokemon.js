@@ -79,7 +79,6 @@ const filterAndPaginate = () => {
     });
 };
 
-// Rest of the code remains the same...
 
 const updatePaginationDiv = (currentPage, numPages) => {
 
