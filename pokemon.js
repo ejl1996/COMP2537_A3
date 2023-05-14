@@ -99,10 +99,10 @@ const filterAndPaginate = async () => {
 
 const updatePaginationDiv = (currentPage, numPages) => {
 
-    $('#pagination').empty()
+    $('#pagination').empty();
     $('#pagination').append(`
     <button type="button" class="btn btn-primary page ml-1 prevButtons" value = "${currentPage - 1}" id="prev">Prev</button>
-    `)
+    `);
 
 
 
@@ -130,11 +130,13 @@ const updatePaginationDiv = (currentPage, numPages) => {
             <button class= "${buttonClass}" value = "${i}" > ${i}</button>
             `);
     }
-    $('#pagination').append(`
-    <button type="button" class="btn btn-primary page ml-1 prevButtons" value = "${currentPage + 1}" id="next">Next</button>
-    `)
 
-}
+    if (x < 81) {
+        $('#pagination').append(`
+    <button type="button" class="btn btn-primary page ml-1 nextButtons" value = "${currentPage + 1}" id="next">Next</button>
+    `);
+    }
+};
 
 //3. Display a specific page of Pokemon cards based on the current page, page size, and the list of Pokemon
 const paginate = async (currentPage, PAGE_SIZE, pokemons) => {
@@ -162,9 +164,9 @@ const setup = async () => {
     pokemons = response.data.results;
 
 
-    paginate(currentPage, PAGE_SIZE, pokemons)
-    const numPages = Math.ceil(pokemons.length / PAGE_SIZE)
-    updatePaginationDiv(currentPage, numPages)
+    paginate(currentPage, PAGE_SIZE, pokemons);
+    const numPages = Math.ceil(pokemons.length / PAGE_SIZE);
+    updatePaginationDiv(currentPage, numPages);
 
 
 
