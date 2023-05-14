@@ -3,6 +3,8 @@ let currentPage = 1;
 let pokemons = [];
 let selectedTypes = [];
 
+
+//1. fetch pokemon types from the APIs, generate checkboxes with pokemon type names, filter pokemon by types. 
 $(document).ready(function () {
     const apiUrl = 'https://pokeapi.co/api/v2/type';
 
@@ -29,6 +31,7 @@ $(document).ready(function () {
                 selectedTypes = $('.typeCheckbox:checked').map(function () {
                     return $(this).val();
                 }).get();
+                console.log(selectedTypes);
 
                 // Reset the current page to 1
                 currentPage = 1;
@@ -46,6 +49,7 @@ $(document).ready(function () {
     });
 });
 
+//fetch list of pokemons from API 
 const fetchPokemons = async () => {
     try {
         const response = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=810');
@@ -57,9 +61,17 @@ const fetchPokemons = async () => {
     }
 };
 
-const filterAndPaginate = () => {
+const fetchPokemonDetails = async () => {
+    const requests = pokemons.map(pokemon => axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemon.name}`));
+    const responses = await Promise.all(requests);
+    return responses.map(response => response.data);
+};
+
+const filterAndPaginate = async () => {
+    const pokemonDetails = await fetchPokemonDetails();
+
     // Filter Pokémon based on selected types
-    const filteredPokemons = pokemons.filter(pokemon => {
+    const filteredPokemons = pokemonDetails.filter(pokemon => {
         for (let i = 0; i < pokemon.types.length; i++) {
             if (selectedTypes.includes(pokemon.types[i].type.name)) {
                 return true;
@@ -69,16 +81,21 @@ const filterAndPaginate = () => {
     });
 
     // Paginate the filtered Pokémon
-    paginate(currentPage, PAGE_SIZE, filteredPokemons);
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+    const endIndex = startIndex + PAGE_SIZE;
+    const paginatedPokemons = filteredPokemons.slice(startIndex, endIndex);
 
     // Update the visibility of Pokémon cards
     $('.pokeCard').each(function () {
         const pokemonName = $(this).attr('pokeName');
-        const isVisible = filteredPokemons.some(pokemon => pokemon.name === pokemonName);
+        const isVisible = paginatedPokemons.some(pokemon => pokemon.name === pokemonName);
         $(this).toggle(isVisible);
     });
 };
 
+
+//2. Populate pagination div by creating previous button/next buttons, hide previous button if page is 1, hide next button if page is 81,
+//and lastly, create numbered buttons in between. 
 
 const updatePaginationDiv = (currentPage, numPages) => {
 
@@ -119,7 +136,7 @@ const updatePaginationDiv = (currentPage, numPages) => {
 
 }
 
-
+//3. Display a specific page of Pokemon cards based on the current page, page size, and the list of Pokemon
 const paginate = async (currentPage, PAGE_SIZE, pokemons) => {
     selected_pokemons = pokemons.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 
@@ -138,10 +155,8 @@ const paginate = async (currentPage, PAGE_SIZE, pokemons) => {
     })
 }
 
+//4. Populate pokemon cards, call an action once button is clicked 
 const setup = async () => {
-    // test out poke api using axios here
-
-
     $('#pokeCards').empty()
     let response = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=810');
     pokemons = response.data.results;
@@ -154,7 +169,7 @@ const setup = async () => {
 
 
     // pop up modal when clicking on a pokemon card
-    // add event listener to each pokemon card
+    // each card displays pokemon's abilities, stats, types 
     $('body').on('click', '.pokeCard', async function (e) {
         const pokemonName = $(this).attr('pokeName')
         // console.log("pokemonName: ", pokemonName);
@@ -190,7 +205,8 @@ const setup = async () => {
         `)
     })
 
-    // add event listener to pagination buttons
+
+    //after clicking the buttons, update the page number accoridingly with the proper pokemons
     $('body').on('click', ".numberedButtons", async function (e) {
         currentPage = Number(e.target.value)
         paginate(currentPage, PAGE_SIZE, pokemons)
